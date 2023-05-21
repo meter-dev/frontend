@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
   const router = useRouter();
 
   return (
-    <div className="flex h-full max-w-sm flex-col px-2 py-4">
+    <div className="flex h-full flex-col px-2 py-4">
       <div className="bg-gradient-to-r from-violet-700 via-fuchsia-700 to-rose-900 bg-clip-text text-center text-3xl font-bold text-transparent">
         METER
       </div>
@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
         <Button
           key={path}
           variant="ghost"
-          className="my-1 justify-start px-3.5"
+          className="my-1 justify-start whitespace-nowrap px-3.5"
           onClick={() => {
             void router.push(path);
           }}

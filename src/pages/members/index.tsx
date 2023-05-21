@@ -1,4 +1,6 @@
-const Members: React.FC = () => {
+import { type NextPage } from "next";
+
+const Members: NextPage = () => {
   return <div>Members</div>;
 };
 

@@ -13,7 +13,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
       <div className="flex min-h-screen flex-col md:flex-row">
         <Sidebar />
         <Separator orientation="vertical" className="h-screen" />
-        <main>{children}</main>
+        <main className="w-full p-4">{children}</main>
       </div>
     </>
   );
