@@ -75,9 +75,7 @@ const Overview: React.FC = () => {
             <CardHeader className="pb-3">
               <CardTitle>Earthquake</CardTitle>
             </CardHeader>
-            <CardContent className="flex gap-x-4">
-              Latest Report: [report]
-            </CardContent>
+            <CardContent className="flex gap-x-4">Latest Report: [report]</CardContent>
           </Card>
         </div>
       </div>

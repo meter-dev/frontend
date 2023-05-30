@@ -1,6 +1,5 @@
 # The frontend app of meter
 
-
 ## Dev
 
 ### Prerequisite
