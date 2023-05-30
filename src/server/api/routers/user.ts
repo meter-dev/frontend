@@ -20,10 +20,10 @@ export const userRouter = createTRPCRouter({
           return { ok: false, data: err };
         });
     }),
-  me: publicProcedure.query(async () => {
+  me: publicProcedure.output(z.any()).query(async () => {
     const user = await fetcher
       .get("/user/me")
-      .then((data) => z.object({ name: z.string(), avatar: z.string() }).parse(data))
+      .then((data) => data)
       .catch(() => null);
 
     if (!user) {

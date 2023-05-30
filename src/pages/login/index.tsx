@@ -21,29 +21,29 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { useLocalStorage } from "usehooks-ts";
 
 const formSchema = z.object({
-  email: z.string().min(1, "Please fill in your Email").email("Invalid Email"),
+  username: z.string().min(1, "Please fill in your Email or Username"),
   password: z.string().min(1, "Please fill in your Password"),
   rememberMe: z.boolean(),
 });
 
 const Login: NextPage = () => {
-  const [storedEmail, setStoredEmail] = useLocalStorage("meter-email", "");
+  const [storedUsername, setStoredUsername] = useLocalStorage("meter-username", "");
   const router = useRouter();
   const { mutateAsync } = api.auth.login.useMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: storedEmail,
+      username: storedUsername,
       password: "",
-      rememberMe: storedEmail !== "",
+      rememberMe: storedUsername !== "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.rememberMe) {
-      setStoredEmail(values.email);
+      setStoredUsername(values.username);
     } else {
-      setStoredEmail("");
+      setStoredUsername("");
     }
     const result = await mutateAsync(values);
     if (result.ok) {
@@ -65,13 +65,13 @@ const Login: NextPage = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[360px] space-y-8">
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email / Username</FormLabel>
                 <FormControl>
                   <Input
-                    id="email"
+                    id="username"
                     className="w-full"
                     {...field}
                     readOnly={form.formState.isSubmitting}
@@ -108,7 +108,7 @@ const Login: NextPage = () => {
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Remember my email</FormLabel>
+                  <FormLabel>Remember my email / username</FormLabel>
                 </div>
               </FormItem>
             )}
