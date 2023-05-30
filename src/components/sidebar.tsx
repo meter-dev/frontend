@@ -59,8 +59,11 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
 
       {user.visitor && (
         <Link
-          className={twMerge(buttonVariants({ variant: "link" }), "mt-2 whitespace-nowrap")}
-          href="/login"
+          className={twMerge(
+            buttonVariants({ variant: "link" }),
+            "mt-2 self-start whitespace-nowrap px-3 text-sm text-slate-500"
+          )}
+          href="/register"
         >
           <span>Login / Register</span>
         </Link>
