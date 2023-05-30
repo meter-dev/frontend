@@ -5,12 +5,15 @@ import fetcher from "../fetcher";
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure
-    .input(z.object({ username: z.string(), password: z.string() }))
+    .input(z.object({ email: z.string(), password: z.string() }))
+    .output(z.any())
     .mutation(async ({ input }) => {
-      const result = await fetcher
-        .post("/auth/login", { username: input.username, password: input.password })
-        .then((res) => z.string().parse(res.data))
-        .catch(() => null);
-      return result;
+      return await fetcher
+        .post("/auth/token", { username: input.email, password: input.password })
+        .then((res: { data: string }) => ({ ok: true, data: res.data }))
+        .catch((err: { errorCode: string }) => {
+          console.error(err);
+          return { ok: false, data: err };
+        });
     }),
 });
