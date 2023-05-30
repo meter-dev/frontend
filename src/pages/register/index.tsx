@@ -52,15 +52,15 @@ const Register: NextPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-start p-10">
-      <h2 className="text-3xl font-bold">Get started</h2>
+    <div className="flex w-full flex-col items-start p-10">
+      <h2 className="text-3xl font-bold">Get started 🚀</h2>
       <span className="mt-2 text-sm text-slate-500">Create your account now</span>
 
       <div className="my-4" />
 
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[360px] space-y-8">
           <FormField
             control={form.control}
             name="email"
@@ -144,7 +144,7 @@ const Register: NextPage = () => {
       <div className="my-6" />
 
       <Link href="/login" className={twMerge(buttonVariants({ variant: "link" }), "px-0")}>
-        Already have an account? Click here to login.
+        {"Already have an account? Click here to Sign in now!"}
       </Link>
     </div>
   );
