@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,6 +16,8 @@ import { Input } from "~/components/ui/input";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react";
+import Link from "next/link";
+import { twMerge } from "tailwind-merge";
 
 const formSchema = z.object({
   email: z.string().min(1, "Please provide an Email").email("Invalid Email"),
@@ -138,6 +140,12 @@ const Register: NextPage = () => {
           </Button>
         </form>
       </Form>
+
+      <div className="my-6" />
+
+      <Link href="/login" className={twMerge(buttonVariants({ variant: "link" }), "px-0")}>
+        Already have an account? Click here to login.
+      </Link>
     </div>
   );
 };
