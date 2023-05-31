@@ -14,14 +14,14 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { user } from "~/lib/api";
 
 const formSchema = z.object({
   email: z.string().min(1, "Please provide an Email").email("Invalid Email"),
-  username: z.string().min(2, "At lease 2 characters").max(16, "At most 16 characters"),
+  name: z.string().min(2, "At lease 2 characters").max(16, "At most 16 characters"),
   password: z.string().min(8, "At lease 8 characters").max(128, "At most 128 characters"),
   // confirmPassword: z.string().min(8).max(128),
 });
@@ -32,23 +32,23 @@ const formSchema = z.object({
 
 const Register: NextPage = () => {
   const router = useRouter();
-  const { mutateAsync } = api.user.signup.useMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      username: "",
+      name: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await mutateAsync(values);
-    if (result.ok) {
-      await router.push("/");
-      return;
+    try {
+      const result = await user.signup(values);
+      console.log(result);
+      await router.push("/login");
+    } catch (e) {
+      console.log(e);
     }
-    console.log("result", result.data);
   }
 
   return (
@@ -81,7 +81,7 @@ const Register: NextPage = () => {
           />
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>

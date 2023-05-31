@@ -2,9 +2,12 @@ import React, { type ReactNode } from "react";
 import Head from "next/head";
 import Sidebar from "./sidebar";
 import { Separator } from "./ui/separator";
-import { api } from "~/utils/api";
 import { Inter, Noto_Sans_TC } from "next/font/google";
 import { twMerge } from "tailwind-merge";
+import Session from "~/lib/session-context";
+import fetcher from "~/lib/fetcher";
+import useSWR from "swr";
+import { type User } from "~/lib/user";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const notoSansTC = Noto_Sans_TC({
@@ -14,9 +17,7 @@ const notoSansTC = Noto_Sans_TC({
 });
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const user = api.user.me.useQuery();
-
-  if (!user.data) return <div>Loading...</div>;
+  const { data, mutate } = useSWR<{ data: User }>("/user/me", fetcher);
 
   return (
     <>
@@ -24,17 +25,24 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         <title>Meter</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
-        className={twMerge(
-          "flex min-h-screen flex-col font-sans md:flex-row",
-          inter.variable,
-          notoSansTC.variable
-        )}
+      <Session.Provider
+        value={{
+          user: data?.data,
+          refetchUser: mutate,
+        }}
       >
-        <Sidebar user={user.data} />
-        <Separator orientation="vertical" className="h-screen" />
-        <main className="w-full p-4">{children}</main>
-      </div>
+        <div
+          className={twMerge(
+            "flex min-h-screen flex-col font-sans md:flex-row",
+            inter.variable,
+            notoSansTC.variable
+          )}
+        >
+          <Sidebar user={data?.data} />
+          <Separator orientation="vertical" className="h-screen" />
+          <main className="w-full p-4">{children}</main>
+        </div>
+      </Session.Provider>
     </>
   );
 };

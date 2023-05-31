@@ -1,42 +1,38 @@
 import { Icon } from "@iconify/react";
 import { buttonVariants } from "~/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Separator } from "./ui/separator";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import { type User } from "~/lib/user";
 
 interface SidebarProps {
-  user: {
-    name: string;
-    avatar: string;
-    visitor: boolean;
-  };
+  user?: User;
 }
-
 const navs = [
   {
     name: "Dashboard",
     icon: "octicon:meter-16",
     path: "/",
-    allowVisitor: true,
+    isPublic: true,
   },
   {
     name: "Issues",
     icon: "octicon:tasklist-16",
     path: "/issues",
-    allowVisitor: false,
+    isPublic: false,
   },
   {
     name: "Members",
     icon: "octicon:organization-16",
     path: "/members",
-    allowVisitor: false,
+    isPublic: false,
   },
   {
     name: "Settings",
     icon: "octicon:gear-16",
     path: "/settings",
-    allowVisitor: false,
+    isPublic: false,
   },
 ];
 
@@ -49,30 +45,51 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
 
       <Separator className="my-4" />
 
-      <div className="flex items-center gap-x-3 px-2">
-        <Avatar className="h-8 w-8">
-          <AvatarImage src={user.avatar} />
-          <AvatarFallback className="uppercase">{user.name.slice(0, 1)}</AvatarFallback>
+      <Link
+        className={twMerge(
+          buttonVariants({
+            variant: "ghost",
+          }),
+          "justify-start whitespace-nowrap px-3.5"
+        )}
+        href="/settings"
+      >
+        <Avatar className="mr-3 h-8 w-8">
+          <AvatarFallback className="uppercase">
+            {user ? user.name.slice(0, 1) : "G"}
+          </AvatarFallback>
         </Avatar>
-        <span>{user.name}</span>
-      </div>
+        {user ? user.name : "Guest"}
+      </Link>
 
-      {user.visitor && (
-        <Link
-          className={twMerge(
-            buttonVariants({ variant: "link" }),
-            "mt-2 self-start whitespace-nowrap px-3 text-sm text-slate-500"
-          )}
-          href="/register"
-        >
-          <span>Login / Register</span>
-        </Link>
+      {!user && (
+        <div className="flex items-center">
+          <Link
+            className={twMerge(
+              buttonVariants({ variant: "link" }),
+              "mt-2 self-start whitespace-nowrap px-3 text-sm text-slate-500"
+            )}
+            href="/login"
+          >
+            Login
+          </Link>
+          <Separator orientation="vertical" className="mt-2 h-4 w-0.5" />
+          <Link
+            className={twMerge(
+              buttonVariants({ variant: "link" }),
+              "mt-2 self-start whitespace-nowrap px-3 text-sm text-slate-500"
+            )}
+            href="/register"
+          >
+            Register
+          </Link>
+        </div>
       )}
 
       <Separator className="my-4" />
 
       {navs
-        .filter(({ allowVisitor }) => allowVisitor || !user || !user.visitor)
+        .filter(({ isPublic }) => isPublic || user)
         .map(({ name, icon, path }) => (
           <Link
             key={path}
@@ -85,7 +102,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             href={path}
           >
             <Icon icon={icon} className="mr-[18px] h-5 w-5" />
-            <span>{name}</span>
+            {name}
           </Link>
         ))}
     </div>

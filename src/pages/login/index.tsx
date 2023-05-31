@@ -13,12 +13,14 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { Checkbox } from "~/components/ui/checkbox";
 import { useLocalStorage } from "usehooks-ts";
+import { useContext } from "react";
+import Session from "~/lib/session-context";
+import { auth } from "~/lib/api";
 
 const formSchema = z.object({
   username: z.string().min(1, "Please fill in your Email or Username"),
@@ -28,8 +30,10 @@ const formSchema = z.object({
 
 const Login: NextPage = () => {
   const [storedUsername, setStoredUsername] = useLocalStorage("meter-username", "");
+  const [, setStoredToken] = useLocalStorage("meter-token", "");
+
+  const { refetchUser } = useContext(Session);
   const router = useRouter();
-  const { mutateAsync } = api.auth.login.useMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,12 +49,22 @@ const Login: NextPage = () => {
     } else {
       setStoredUsername("");
     }
-    const result = await mutateAsync(values);
-    if (result.ok) {
+    try {
+      const loginForm = new FormData();
+      loginForm.append("username", values.username);
+      loginForm.append("password", values.password);
+      const { data } = await auth.token(loginForm);
+      if (data.token_type === "bearer") {
+        setStoredToken(`Bearer ${data.access_token}`);
+      } else {
+        setStoredToken(`${data.token_type} ${data.access_token}`);
+      }
+      refetchUser();
       await router.push("/");
-      return;
+    } catch (error) {
+      form.setError("root", { message: "Login Failed" });
+      console.log(error);
     }
-    console.log("result", result.data);
   }
 
   return (
