@@ -1,9 +1,5 @@
 import fetcher from "./fetcher";
 
-interface LoginForm {
-  username: string;
-  password: string;
-}
 interface SignupReqBody {
   email: string;
   name: string;
@@ -12,11 +8,9 @@ interface SignupReqBody {
 
 const auth = {
   token: (form: FormData) =>
-    fetcher
-      .post<FormData, { data: { token_type: string; access_token: string } }>("/auth/token", form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .catch(console.log),
+    fetcher.post<{ token_type: string; access_token: string }>("/auth/token", form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    }),
 };
 
 const user = {
