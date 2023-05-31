@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const fetcher = axios.create({
-  baseURL: "http://localhost:8000",
-  // baseURL: "https://meter.hackyour.pw/",
+  baseURL:
+    process.env.NODE_ENV === "production" ? "https://meter.hackyour.pw/" : "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
   },
