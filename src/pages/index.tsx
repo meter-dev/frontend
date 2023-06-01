@@ -8,11 +8,9 @@ import { Separator } from "~/components/ui/separator";
 
 const Dashboard: NextPage = () => {
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-6 md:px-6">
       <Overview />
-      <Separator className="my-1" />
       <Electricity />
-      <Separator className="my-1" />
       <Reservoir />
       <Separator className="my-1" />
       <Weather />
