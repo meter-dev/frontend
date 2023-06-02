@@ -60,9 +60,9 @@ const Issues: NextPage = () => {
   const { data: rules } = useSWR<{ data: Rule[] }>("/rule/", fetcher);
   const filteredRules = useMemo(() => {
     return {
-      all: rules?.data || [],
-      enalbed: (rules?.data || []).filter((rule) => rule.is_enable),
-      disabled: (rules?.data || []).filter((rule) => !rule.is_enable),
+      all: rules?.data,
+      enalbed: rules?.data?.filter((rule) => rule.is_enable),
+      disabled: rules?.data?.filter((rule) => !rule.is_enable),
     };
   }, [rules]);
 
