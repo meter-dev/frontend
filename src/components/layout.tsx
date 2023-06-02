@@ -40,7 +40,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
         >
           <Sidebar user={data?.data} />
           <Separator orientation="vertical" className="h-screen" />
-          <main className="w-full overflow-y-scroll p-4">{children}</main>
+          <main className="w-full overflow-y-auto p-4">{children}</main>
         </div>
       </Session.Provider>
     </>
