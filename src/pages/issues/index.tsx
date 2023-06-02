@@ -3,9 +3,16 @@ import IssueTable from "~/components/issues/issue-table";
 import { Input } from "~/components/ui/input";
 import { type Issue } from "~/components/issues/columns";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Separator } from "~/components/ui/separator";
+import { Button } from "~/components/ui/button";
+import RuleTable from "~/components/rules/rule-table";
+import useSWR from "swr";
+import { type Rule } from "~/components/rules/columns";
+import fetcher from "~/lib/fetcher";
+import { Badge } from "~/components/ui/badge";
 
-const data: Issue[] = [
+const issues: Issue[] = [
   {
     id: "m5gr84i9",
     title: "電供過低",
@@ -32,28 +39,74 @@ const data: Issue[] = [
   },
 ];
 
+type IssueTab = "unresolved" | "reviewing" | "resolved";
+const issueTabs: IssueTab[] = ["unresolved", "reviewing", "resolved"];
+
+type RuleTab = "all" | "enalbed" | "disabled";
+const ruleTabs: RuleTab[] = ["all", "enalbed", "disabled"];
+
 const Issues: NextPage = () => {
-  const tableData = {
-    unresolved: data.filter((issue) => issue.status === "unresolved"),
-    reviewing: data.filter((issue) => issue.status === "reviewing"),
-    resolved: data.filter((issue) => issue.status === "resolved"),
-  };
-  const [tab, setTab] = useState<"unresolved" | "reviewing" | "resolved">("unresolved");
+  // const { data: issues } = useSWR<{ data: Issue[] }>("/issue/", fetcher);
+  const [issueTab, setIssueTab] = useState<IssueTab>("unresolved");
+  const filteredIssues = useMemo(() => {
+    return {
+      unresolved: issues.filter((issue) => issue.status === "unresolved"),
+      reviewing: issues.filter((issue) => issue.status === "reviewing"),
+      resolved: issues.filter((issue) => issue.status === "resolved"),
+    };
+  }, []);
+
+  const [ruleTab, setRuleTab] = useState<RuleTab>("all");
+  const { data: rules } = useSWR<{ data: Rule[] }>("/rule/", fetcher);
+  const filteredRules = useMemo(() => {
+    return {
+      all: rules?.data || [],
+      enalbed: (rules?.data || []).filter((rule) => rule.is_enable),
+      disabled: (rules?.data || []).filter((rule) => !rule.is_enable),
+    };
+  }, [rules]);
 
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">事件</h2>
-        <Input type="text" placeholder="搜尋" className="w-1/2" />
       </div>
-      <Tabs value={tab} onValueChange={(v) => setTab(v as "unresolved" | "reviewing" | "resolved")}>
-        <TabsList>
-          <TabsTrigger value="unresolved">{tableData.unresolved.length} Unresolved</TabsTrigger>
-          <TabsTrigger value="reviewing">{tableData.reviewing.length} Reviewing</TabsTrigger>
-          <TabsTrigger value="resolved">{tableData.resolved.length} Resolved</TabsTrigger>
-        </TabsList>
-      </Tabs>
-      <IssueTable data={data} />
+      <div className="flex items-center gap-x-8">
+        <Tabs value={issueTab} onValueChange={(v) => setIssueTab(v as IssueTab)}>
+          <TabsList>
+            {issueTabs.map((tab) => (
+              <TabsTrigger key={tab} value={tab}>
+                <span className="capitalize">{tab}</span>
+                <Badge className="ml-1 px-1" variant="secondary">
+                  {filteredIssues[tab].length}
+                </Badge>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Input type="text" placeholder="搜尋" className="max-w-xl" />
+      </div>
+      <IssueTable data={filteredIssues[issueTab]} />
+
+      <Separator orientation="horizontal" className="my-10" />
+
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">警告規則</h2>
+      </div>
+      <div className="flex items-center gap-x-8">
+        <Tabs value={ruleTab} onValueChange={(v) => setRuleTab(v as RuleTab)}>
+          <TabsList>
+            {ruleTabs.map((tab) => (
+              <TabsTrigger key={tab} value={tab}>
+                <span className="capitalize">{tab}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Input type="text" placeholder="搜尋" className="max-w-xl" />
+        <Button>新增</Button>
+      </div>
+      <RuleTable data={filteredRules[ruleTab]} />
     </div>
   );
 };

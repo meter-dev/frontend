@@ -9,6 +9,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { twMerge } from "tailwind-merge";
+import { fontClasses } from "~/lib/fonts";
 
 export type Issue = {
   id: string;
@@ -66,7 +68,7 @@ export const columns: ColumnDef<Issue>[] = [
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {row.original.assignees.map((username) => (
-                  <DropdownMenuItem key={username}>
+                  <DropdownMenuItem key={username} className={twMerge("font-sans", fontClasses)}>
                     <Avatar key={username} className="h-8 w-8">
                       {/* <AvatarImage src={user.avatar} /> */}
                       <AvatarFallback className="uppercase">{username.slice(0, 2)}</AvatarFallback>
