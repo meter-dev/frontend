@@ -1,9 +1,22 @@
 import fetcher from "./fetcher";
 
+/**
+ * GET REQUESTS WONT BE HANDLED HERE
+ * USING `const { data} = useSWR("/route", fetcher)` IN HOOK INSTEAD
+ */
+
 interface SignupReqBody {
   email: string;
   name: string;
   password: string;
+}
+
+interface CreateRuleReqBody {
+  name: string;
+  position: string;
+  resource: string;
+  operator: string;
+  value: number;
 }
 
 const auth = {
@@ -17,4 +30,10 @@ const user = {
   signup: (data: SignupReqBody) => fetcher.post("/user/signup", data),
 };
 
-export { auth, user };
+const rule = {
+  create: (data: CreateRuleReqBody) => fetcher.post("/rule/", data),
+  update: (id: number, data: CreateRuleReqBody) => fetcher.patch(`/rule/${id}`, data),
+  delete: (id: number) => fetcher.delete(`/rule/${id}`),
+};
+
+export { auth, user, rule };

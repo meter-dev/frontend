@@ -11,13 +11,14 @@ import useSWR from "swr";
 import { type Rule } from "~/components/rules/columns";
 import fetcher from "~/lib/fetcher";
 import { Badge } from "~/components/ui/badge";
+import RuleForm from "~/components/rules/rule-form";
 
 const issues: Issue[] = [
   {
-    id: "m5gr84i9",
-    title: "電供過低",
-    description: "電供過低",
-    alertId: "ELEC-1",
+    id: "E002-9f37a0",
+    title: "供電：備轉燈號 >= 紅燈",
+    description: "台電處置中，最新公告：https://......",
+    alertId: "E003-00",
     status: "unresolved",
     assignees: ["bogay", "ala"],
     createdAt: "2021-08-01T00:00:00Z",
@@ -26,10 +27,10 @@ const issues: Issue[] = [
     closedBy: "",
   },
   {
-    id: "1233452345",
-    title: "電供驟降",
-    description: "電供驟降",
-    alertId: "ELEC-2",
+    id: "E002-0a73f9",
+    title: "供水：水庫水位 < 10%",
+    description: "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet",
+    alertId: "W001-00",
     status: "unresolved",
     assignees: ["bogay", "ala", "uier", "skps"],
     createdAt: "2021-08-01T00:00:00Z",
@@ -57,7 +58,7 @@ const Issues: NextPage = () => {
   }, []);
 
   const [ruleTab, setRuleTab] = useState<RuleTab>("all");
-  const { data: rules } = useSWR<{ data: Rule[] }>("/rule/", fetcher);
+  const { data: rules, mutate: fetchRules } = useSWR<{ data: Rule[] }>("/rule/", fetcher);
   const filteredRules = useMemo(() => {
     return {
       all: rules?.data,
@@ -65,9 +66,10 @@ const Issues: NextPage = () => {
       disabled: rules?.data?.filter((rule) => !rule.is_enable),
     };
   }, [rules]);
+  const [isCreatingRule, setIsCreatingRule] = useState(false);
 
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 pb-[300px]">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">事件</h2>
       </div>
@@ -104,8 +106,25 @@ const Issues: NextPage = () => {
           </TabsList>
         </Tabs>
         <Input type="text" placeholder="搜尋" className="max-w-xl" />
-        <Button>新增</Button>
+        <Button
+          variant={isCreatingRule ? "outline" : "default"}
+          onClick={() => setIsCreatingRule((v) => !v)}
+        >
+          新增
+        </Button>
       </div>
+      {isCreatingRule && (
+        <div className="px-10 pb-10 pt-6">
+          <div className="mb-2 text-xl font-medium">新增警告規則</div>
+          <RuleForm
+            onCancel={() => setIsCreatingRule(false)}
+            onSuccess={() => {
+              setIsCreatingRule(false);
+              void fetchRules();
+            }}
+          />
+        </div>
+      )}
       <RuleTable data={filteredRules[ruleTab]} />
     </div>
   );

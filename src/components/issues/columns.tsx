@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { twMerge } from "tailwind-merge";
 import { fontClasses } from "~/lib/fonts";
+import { formatTime } from "~/lib/dt";
 
 export type Issue = {
   id: string;
@@ -86,5 +87,8 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "createdAt",
     header: "Created At",
+    cell: ({ row }) => {
+      return formatTime(row.original.createdAt);
+    },
   },
 ];

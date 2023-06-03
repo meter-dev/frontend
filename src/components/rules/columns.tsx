@@ -1,6 +1,9 @@
 "use client";
 
 import { type ColumnDef } from "@tanstack/react-table";
+import { Button } from "../ui/button";
+import { Icon } from "@iconify/react";
+import { RESOURCES } from "./options";
 
 export type Rule = {
   id: number;
@@ -24,6 +27,9 @@ export const columns: ColumnDef<Rule>[] = [
   {
     accessorKey: "resource",
     header: "Resource",
+    cell: ({ row }) => {
+      return RESOURCES.find((r) => r.value === row.original.resource)?.label;
+    },
   },
   {
     accessorKey: "position",
@@ -36,5 +42,28 @@ export const columns: ColumnDef<Rule>[] = [
   {
     accessorKey: "is_enable",
     header: "Status",
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center gap-x-1">
+          <Icon
+            icon={row.original.is_enable ? "mdi:check-bold" : "mdi:close-thick"}
+            className={row.original.is_enable ? "text-green-500" : "text-red-500"}
+          />
+          {row.original.is_enable ? "Enabled" : "Disabled"}
+        </div>
+      );
+    },
+  },
+  {
+    header: "Actions",
+    cell: () => {
+      return (
+        <div className="flex items-center gap-x-2">
+          <Button variant="link" onClick={() => alert("TODO :(")}>
+            Edit
+          </Button>
+        </div>
+      );
+    },
   },
 ];

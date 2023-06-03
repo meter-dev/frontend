@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import React, { useEffect, type ReactNode, useState } from "react";
 import Head from "next/head";
 import Sidebar from "./sidebar";
 import { Separator } from "./ui/separator";
@@ -10,9 +10,26 @@ import { type User } from "~/lib/user";
 import { fontClasses } from "~/lib/fonts";
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { data, mutate } = useSWR<{ data: User }>("/user/me", fetcher, {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { data, error, mutate } = useSWR<{ data: User }>("/user/me", fetcher, {
     revalidateOnFocus: false,
   });
+
+  const [autoLogout, setAutoLogout] = useState(false);
+
+  useEffect(() => {
+    if (!error) {
+      setAutoLogout(false);
+      return;
+    }
+    if (error && !autoLogout) {
+      // todo: show modal
+      if (window.location.pathname !== "/login") {
+        window.location.pathname = "/login";
+      }
+      setAutoLogout(true);
+    }
+  }, [error, autoLogout]);
 
   return (
     <>
