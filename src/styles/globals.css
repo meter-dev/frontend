@@ -79,3 +79,17 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+.g-gauge svg:first-child > g > text[text-anchor~="middle"] {
+  font-size: 18px;
+  fill: #0f172a;
+}
+
+.g-gauge svg:first-child > g > g > text[text-anchor~="middle"] {
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.g-gauge svg:first-child > g > g > circle {
+  r: 8;
+}

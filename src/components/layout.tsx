@@ -33,14 +33,14 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
       >
         <div
           className={twMerge(
-            "flex min-h-screen flex-col font-sans md:flex-row",
+            "flex h-screen flex-col font-sans md:flex-row",
             inter.variable,
             notoSansTC.variable
           )}
         >
           <Sidebar user={data?.data} />
           <Separator orientation="vertical" className="h-screen" />
-          <main className="w-full p-4">{children}</main>
+          <main className="w-full overflow-y-auto p-4">{children}</main>
         </div>
       </Session.Provider>
     </>
