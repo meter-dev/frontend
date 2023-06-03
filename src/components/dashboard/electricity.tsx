@@ -32,7 +32,7 @@ const Electricity: React.FC = () => {
           <span className="text-2xl font-semibold">Electricity</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full gap-x-4 overflow-x-scroll">
+      <CardContent className="flex w-full gap-x-4 overflow-x-auto">
         <div className="flex w-[200px] flex-col items-center">
           <MeterGauge
             title="北部"

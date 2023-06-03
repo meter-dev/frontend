@@ -12,7 +12,7 @@ const Reservoir: React.FC = () => {
           <span className="text-2xl font-semibold">Reservoir</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full gap-x-4 overflow-x-scroll">
+      <CardContent className="flex w-full gap-x-4 overflow-x-auto">
         <div className="flex w-[200px] flex-col items-center">
           <MeterLiquid title="石門水庫" width={200} percent={0.451} />
         </div>
