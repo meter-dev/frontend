@@ -74,7 +74,8 @@ const RuleForm: React.FC<RuleFormProps> = ({ onCancel, onSuccess }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={void form.handleSubmit(onSubmit)}>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-wrap gap-x-4 gap-y-2 lg:flex-nowrap">
           <FormField
             control={form.control}
