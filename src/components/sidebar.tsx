@@ -52,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
           }),
           "justify-start whitespace-nowrap px-3.5"
         )}
-        href="/settings"
+        href={user ? "/settings" : "/login"}
       >
         <Avatar className="mr-3 h-8 w-8">
           <AvatarFallback className="uppercase">

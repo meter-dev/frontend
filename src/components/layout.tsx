@@ -1,23 +1,35 @@
-import React, { type ReactNode } from "react";
+import React, { useEffect, type ReactNode, useState } from "react";
 import Head from "next/head";
 import Sidebar from "./sidebar";
 import { Separator } from "./ui/separator";
-import { Inter, Noto_Sans_TC } from "next/font/google";
 import { twMerge } from "tailwind-merge";
 import Session from "~/lib/session-context";
 import fetcher from "~/lib/fetcher";
 import useSWR from "swr";
 import { type User } from "~/lib/user";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const notoSansTC = Noto_Sans_TC({
-  subsets: ["latin"],
-  variable: "--font-noto-sans-tc",
-  weight: ["100", "300", "400", "500", "700", "900"],
-});
+import { fontClasses } from "~/lib/fonts";
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { data, mutate } = useSWR<{ data: User }>("/user/me", fetcher);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const { data, error, mutate } = useSWR<{ data: User }>("/user/me", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  const [autoLogout, setAutoLogout] = useState(false);
+
+  useEffect(() => {
+    if (!error) {
+      setAutoLogout(false);
+      return;
+    }
+    if (error && !autoLogout) {
+      // todo: show modal
+      if (window.location.pathname !== "/login") {
+        window.location.pathname = "/login";
+      }
+      setAutoLogout(true);
+    }
+  }, [error, autoLogout]);
 
   return (
     <>
@@ -31,13 +43,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
           refetchUser: mutate,
         }}
       >
-        <div
-          className={twMerge(
-            "flex h-screen flex-col font-sans md:flex-row",
-            inter.variable,
-            notoSansTC.variable
-          )}
-        >
+        <div className={twMerge("flex h-screen flex-col font-sans md:flex-row", fontClasses)}>
           <Sidebar user={data?.data} />
           <Separator orientation="vertical" className="h-screen" />
           <main className="w-full overflow-y-auto p-4">{children}</main>
