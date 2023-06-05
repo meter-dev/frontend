@@ -9,7 +9,7 @@ export type Rule = {
   id: number;
   name: string;
   position: string;
-  resource: string;
+  resource: "E002" | "E003" | "W001" | "Q001";
   operator: string;
   value: number;
   is_enable: boolean;
@@ -56,10 +56,10 @@ export const columns: ColumnDef<Rule>[] = [
   },
   {
     header: "Actions",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-2">
-          <Button variant="link" onClick={() => alert("TODO :(")}>
+          <Button variant="link" onClick={() => row.toggleExpanded()}>
             Edit
           </Button>
         </div>

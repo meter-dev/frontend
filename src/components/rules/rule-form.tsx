@@ -28,7 +28,7 @@ import { Separator } from "../ui/separator";
 import { rule } from "~/lib/api";
 
 interface RuleFormProps {
-  rule?: Rule;
+  editRule?: Rule;
   onCancel: () => void;
   onSuccess: () => void;
 }
@@ -52,23 +52,53 @@ const formSchema = z
     }
   );
 
-const RuleForm: React.FC<RuleFormProps> = ({ onCancel, onSuccess }) => {
+const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    },
+    defaultValues: editRule
+      ? {
+          name: editRule.name,
+          resource: editRule.resource,
+          position: editRule.position,
+          operator: editRule.operator,
+          value: editRule.value,
+        }
+      : {
+          name: "",
+        },
   });
   const resource = form.watch("resource");
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    try {
-      await rule.create(values);
-      form.reset();
-      onSuccess();
-    } catch (error) {
-      form.setError("root", { message: "Login Failed" });
-      console.log(error);
+    if (editRule) {
+      try {
+        await rule.update(editRule.id, values);
+        form.reset();
+        onSuccess();
+      } catch (error) {
+        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        console.log(error);
+      }
+    } else {
+      try {
+        await rule.create(values);
+        form.reset();
+        onSuccess();
+      } catch (error) {
+        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        console.log(error);
+      }
+    }
+  }
+  async function onDelete() {
+    if (editRule) {
+      try {
+        await rule.delete(editRule.id);
+        onSuccess();
+      } catch (error) {
+        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        console.log(error);
+      }
     }
   }
 
@@ -229,6 +259,22 @@ const RuleForm: React.FC<RuleFormProps> = ({ onCancel, onSuccess }) => {
         </div>
         <Separator className="my-6" />
         <div className="flex justify-end gap-x-6">
+          {editRule && (
+            <>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => {
+                  if (confirm("確定要刪除嗎？")) {
+                    void onDelete();
+                  }
+                }}
+              >
+                Delete
+              </Button>
+              <div className="flex-1" />
+            </>
+          )}
           <Button
             type="button"
             variant="secondary"
