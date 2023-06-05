@@ -26,6 +26,8 @@ import { OPERATORS, POSITIONS, RESOURCES, VALUES, VALUE_VALIDATOR } from "./opti
 import { Icon } from "@iconify/react";
 import { Separator } from "../ui/separator";
 import { rule } from "~/lib/api";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
 
 interface RuleFormProps {
   editRule?: Rule;
@@ -91,9 +93,24 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
     }
   }
   async function onDelete() {
-    if (editRule) {
+    if (editRule && confirm("確定要刪除嗎？")) {
       try {
         await rule.delete(editRule.id);
+        onSuccess();
+      } catch (error) {
+        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        console.log(error);
+      }
+    }
+  }
+  async function onToggleEnable(toEnable: boolean) {
+    if (editRule) {
+      try {
+        if (toEnable) {
+          await rule.enable(editRule.id);
+        } else {
+          await rule.disable(editRule.id);
+        }
         onSuccess();
       } catch (error) {
         form.setError("root", { message: "失敗了，原因還沒寫上來" });
@@ -265,13 +282,21 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                 type="button"
                 variant="destructive"
                 onClick={() => {
-                  if (confirm("確定要刪除嗎？")) {
-                    void onDelete();
-                  }
+                  void onDelete();
                 }}
               >
                 Delete
               </Button>
+              <div className="ml-4 flex items-center space-x-2">
+                <Switch
+                  id="toggle-rule"
+                  checked={editRule.is_enable}
+                  onCheckedChange={(v) => {
+                    void onToggleEnable(v);
+                  }}
+                />
+                <Label htmlFor="toggle-rule">{editRule.is_enable ? "啟用中" : "禁用中"}</Label>
+              </div>
               <div className="flex-1" />
             </>
           )}

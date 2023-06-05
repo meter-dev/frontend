@@ -49,7 +49,7 @@ export const columns: ColumnDef<Rule>[] = [
             icon={row.original.is_enable ? "mdi:check-bold" : "mdi:close-thick"}
             className={row.original.is_enable ? "text-green-500" : "text-red-500"}
           />
-          {row.original.is_enable ? "Enabled" : "Disabled"}
+          {row.original.is_enable ? "啟用中" : "禁用中"}
         </div>
       );
     },

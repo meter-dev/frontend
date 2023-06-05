@@ -34,6 +34,8 @@ const rule = {
   create: (data: CreateRuleReqBody) => fetcher.post("/rule/", data),
   update: (id: number, data: CreateRuleReqBody) => fetcher.patch(`/rule/${id}`, data),
   delete: (id: number) => fetcher.delete(`/rule/${id}`),
+  enable: (id: number) => fetcher.put(`/rule/${id}/enable`),
+  disable: (id: number) => fetcher.put(`/rule/${id}/disable`),
 };
 
 export { auth, user, rule };
