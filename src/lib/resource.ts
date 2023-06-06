@@ -27,3 +27,11 @@ export interface EletricityResource {
     recv_rate: number;
   };
 }
+
+export interface WaterResource {
+  id: number | null;
+  name: string;
+  timestamp: number;
+  storage: number;
+  percent: number;
+}

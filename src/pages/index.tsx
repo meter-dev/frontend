@@ -8,17 +8,17 @@ import Reservoir from "~/components/dashboard/reservoir";
 // import { Separator } from "~/components/ui/separator";
 import useSWR from "swr";
 import fetcher from "~/lib/fetcher";
-import { type EletricityResource } from "~/lib/resource";
+import { type EletricityResource, type WaterResource } from "~/lib/resource";
 
 const Dashboard: NextPage = () => {
   const { data: powerData } = useSWR<{ data: EletricityResource[] }>("/report/power", fetcher);
-  const { data: waterData } = useSWR("/report/dam", fetcher);
+  const { data: waterData } = useSWR<{ data: WaterResource[] }>("/report/dam", fetcher);
   const { data: quakeData } = useSWR("/report/eq", fetcher);
   return (
     <div className="flex w-full flex-col gap-6 md:px-6">
       <Overview />
       <Electricity data={powerData?.data.at(-1)} />
-      <Reservoir data={waterData} />
+      <Reservoir data={waterData?.data} />
       <Earthquake data={quakeData} />
       {/* <Separator className="my-1" />
       <Weather />

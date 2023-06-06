@@ -7,6 +7,8 @@ interface LiquidProps {
   percent: number;
   width: number;
   title: string;
+  storage: number;
+  timestamp: number;
 }
 
 const MeterLiquid: React.FC<LiquidProps> = ({ title, percent, width }) => {
