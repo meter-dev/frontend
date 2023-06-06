@@ -11,25 +11,31 @@ interface SidebarProps {
 }
 const navs = [
   {
-    name: "Dashboard",
+    name: "儀表板",
     icon: "octicon:meter-16",
     path: "/",
     isPublic: true,
   },
   {
-    name: "Issues",
+    name: "警報事件",
     icon: "octicon:tasklist-16",
     path: "/issues",
     isPublic: false,
   },
   {
-    name: "Members",
-    icon: "octicon:organization-16",
-    path: "/members",
+    name: "警報規則",
+    icon: "octicon:alert-16",
+    path: "/rules",
     isPublic: false,
   },
+  // {
+  //   name: "Members",
+  //   icon: "octicon:organization-16",
+  //   path: "/members",
+  //   isPublic: false,
+  // },
   {
-    name: "Settings",
+    name: "設定",
     icon: "octicon:gear-16",
     path: "/settings",
     isPublic: false,
@@ -38,7 +44,7 @@ const navs = [
 
 const Sidebar: React.FC<SidebarProps> = ({ user }) => {
   return (
-    <div className="flex h-full flex-col px-2 py-4">
+    <div className="flex h-full flex-col p-4">
       <div className="bg-gradient-to-r from-violet-700 via-fuchsia-700 to-rose-900 bg-clip-text text-center text-3xl font-bold text-transparent">
         METER
       </div>
@@ -71,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             )}
             href="/login"
           >
-            Login
+            登入
           </Link>
           <Separator orientation="vertical" className="mt-2 h-4 w-0.5" />
           <Link
@@ -81,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ user }) => {
             )}
             href="/register"
           >
-            Register
+            註冊
           </Link>
         </div>
       )}

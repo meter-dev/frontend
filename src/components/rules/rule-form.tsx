@@ -51,7 +51,7 @@ const formSchema = z
       return VALUE_VALIDATOR[data.resource].safeParse(data.value).success;
     },
     {
-      message: "Invalid value",
+      message: "無效的數值",
       path: ["value"],
     }
   );
@@ -80,7 +80,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
         form.reset();
         onSuccess();
       } catch (error) {
-        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        form.setError("root", { message: getErrorMsg("UNKNOWN") });
         console.log(error);
       }
     } else {
@@ -89,7 +89,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
         form.reset();
         onSuccess();
       } catch (error) {
-        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        form.setError("root", { message: getErrorMsg("UNKNOWN") });
         console.log(error);
       }
     }
@@ -100,7 +100,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
         await rule.delete(editRule.id);
         onSuccess();
       } catch (error) {
-        form.setError("root", { message: "失敗了，原因還沒寫上來" });
+        form.setError("root", { message: getErrorMsg("UNKNOWN") });
         console.log(error);
       }
     }
@@ -132,7 +132,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-wrap gap-x-4 gap-y-2 lg:flex-nowrap">
           {form.formState.errors.root && (
-            <ErrorAlert title="失敗了" description={form.formState.errors.root.message} />
+            <ErrorAlert title="操作失敗" description={form.formState.errors.root.message} />
           )}
           <FormField
             control={form.control}
@@ -166,7 +166,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Resource</SelectLabel>
+                        <SelectLabel>監控資源</SelectLabel>
                         {RESOURCES.map(({ value, label }) => (
                           <SelectItem key={value} value={value}>
                             {label}
@@ -197,7 +197,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                     </SelectTrigger>
                     <SelectContent className="h-[300px] overflow-y-auto">
                       <SelectGroup>
-                        <SelectLabel>Position</SelectLabel>
+                        <SelectLabel>監控範圍</SelectLabel>
                         {resource &&
                           (POSITIONS[resource[0] as keyof typeof POSITIONS] || []).map(
                             ({ value, label }) => (
@@ -227,7 +227,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Operator</SelectLabel>
+                        <SelectLabel>規則運算</SelectLabel>
                         {OPERATORS.map(({ value, label }) => (
                           <SelectItem key={value} value={value}>
                             {label}
@@ -255,7 +255,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Value</SelectLabel>
+                          <SelectLabel>門檻值</SelectLabel>
                           {VALUES[resource as "E003"].options.map(({ value, label }) => (
                             <SelectItem key={value} value={`${value}`}>
                               {label}
@@ -295,7 +295,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                   void onDelete();
                 }}
               >
-                Delete
+                刪除
               </Button>
               <div className="ml-4 flex items-center space-x-2">
                 <Switch
@@ -319,13 +319,13 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
               onCancel();
             }}
           >
-            Cancel
+            取消
           </Button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && (
               <Icon icon="ion:load-c" className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Save and Deploy Rule
+            確認送出
           </Button>
         </div>
       </form>

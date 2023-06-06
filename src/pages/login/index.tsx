@@ -77,7 +77,7 @@ const Login: NextPage = () => {
   return (
     <div className="flex w-full flex-col items-start p-10">
       <h2 className="text-3xl font-bold">Welcome back 👋</h2>
-      <span className="mt-2 text-sm text-slate-500">Sign in to continue access</span>
+      <span className="mt-2 text-sm text-slate-500">請進行登入以使用更多功能</span>
 
       <div className="my-4" />
 
@@ -132,7 +132,7 @@ const Login: NextPage = () => {
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Remember my email / username</FormLabel>
+                  <FormLabel>記住我的 Email / Username</FormLabel>
                 </div>
               </FormItem>
             )}
@@ -142,7 +142,7 @@ const Login: NextPage = () => {
             {form.formState.isSubmitting && (
               <Icon icon="ion:load-c" className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In
+            登入
           </Button>
         </form>
       </Form>
@@ -150,7 +150,7 @@ const Login: NextPage = () => {
       <div className="my-6" />
 
       <Link href="/register" className={twMerge(buttonVariants({ variant: "link" }), "px-0")}>
-        {"Don't have an account? Click here to Sign up now!"}
+        {"還沒有帳號嗎？點選這裡立即註冊！"}
       </Link>
     </div>
   );

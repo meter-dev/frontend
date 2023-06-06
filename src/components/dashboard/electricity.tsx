@@ -17,7 +17,7 @@ interface ElectricityProps {
 
 const Electricity: React.FC<ElectricityProps> = ({ data }) => {
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Icon icon="ion:flash" className="mr-2 h-5 w-5" />
@@ -27,7 +27,7 @@ const Electricity: React.FC<ElectricityProps> = ({ data }) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="ml-3 self-end text-xs font-normal text-primary/50">
-                    Last update: {fromNow(data?.timestamp * 1000)}
+                    最後更新於：{fromNow(data?.timestamp * 1000)}
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -38,7 +38,7 @@ const Electricity: React.FC<ElectricityProps> = ({ data }) => {
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full flex-wrap gap-x-4 overflow-x-auto">
+      <CardContent className="flex w-full flex-wrap gap-x-6 overflow-x-auto">
         {[
           { title: "全台", key: "whole" },
           { title: "北部", key: "north" },
