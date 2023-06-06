@@ -18,6 +18,8 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { user } from "~/lib/api";
+import ErrorAlert from "~/components/error-alert";
+import { errorSchema, getErrorMsg } from "~/lib/errors";
 
 const formSchema = z.object({
   email: z.string().min(1, "Please provide an Email").email("Invalid Email"),
@@ -47,7 +49,13 @@ const Register: NextPage = () => {
       console.log(result);
       await router.push("/login");
     } catch (e) {
-      console.log(e);
+      const error = errorSchema.safeParse(e);
+      if (error.success && error.data.response.code) {
+        form.setError("root", { message: getErrorMsg(error.data.response.code) });
+      } else {
+        form.setError("root", { message: getErrorMsg("UNKNOWN") });
+        console.error(e);
+      }
     }
   }
 
@@ -61,6 +69,9 @@ const Register: NextPage = () => {
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[360px] space-y-8">
+          {form.formState.errors.root && (
+            <ErrorAlert title="登入失敗" description={form.formState.errors.root.message} />
+          )}
           <FormField
             control={form.control}
             name="email"

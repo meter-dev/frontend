@@ -28,6 +28,8 @@ import { Separator } from "../ui/separator";
 import { rule } from "~/lib/api";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import ErrorAlert from "../error-alert";
+import { errorSchema, getErrorMsg } from "~/lib/errors";
 
 interface RuleFormProps {
   editRule?: Rule;
@@ -112,9 +114,14 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
           await rule.disable(editRule.id);
         }
         onSuccess();
-      } catch (error) {
-        form.setError("root", { message: "失敗了，原因還沒寫上來" });
-        console.log(error);
+      } catch (e) {
+        const error = errorSchema.safeParse(e);
+        if (error.success && error.data.response.code) {
+          form.setError("root", { message: getErrorMsg(error.data.response.code) });
+        } else {
+          form.setError("root", { message: getErrorMsg("UNKNOWN") });
+          console.error(e);
+        }
       }
     }
   }
@@ -124,6 +131,9 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
       {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-wrap gap-x-4 gap-y-2 lg:flex-nowrap">
+          {form.formState.errors.root && (
+            <ErrorAlert title="失敗了" description={form.formState.errors.root.message} />
+          )}
           <FormField
             control={form.control}
             name="name"

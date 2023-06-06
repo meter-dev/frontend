@@ -21,6 +21,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { useContext } from "react";
 import Session from "~/lib/session-context";
 import { auth } from "~/lib/api";
+import ErrorAlert from "~/components/error-alert";
+import { errorSchema, getErrorMsg } from "~/lib/errors";
 
 const formSchema = z.object({
   username: z.string().min(1, "Please fill in your Email or Username"),
@@ -61,9 +63,14 @@ const Login: NextPage = () => {
       }
       refetchUser();
       await router.push("/");
-    } catch (error) {
-      form.setError("root", { message: "Login Failed" });
-      console.log(error);
+    } catch (e) {
+      const error = errorSchema.safeParse(e);
+      if (error.success && error.data.response.code) {
+        form.setError("root", { message: getErrorMsg(error.data.response.code) });
+      } else {
+        form.setError("root", { message: getErrorMsg("UNKNOWN") });
+        console.error(e);
+      }
     }
   }
 
@@ -77,6 +84,9 @@ const Login: NextPage = () => {
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[360px] space-y-8">
+          {form.formState.errors.root && (
+            <ErrorAlert title="登入失敗" description={form.formState.errors.root.message} />
+          )}
           <FormField
             control={form.control}
             name="username"
