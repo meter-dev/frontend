@@ -21,7 +21,7 @@ export const RESOURCES = [
   { value: RES_ID.W001, label: "供水 - 水庫水位 (%)" },
   // { value: "W002", label: "水庫蓄水量 (萬立方公尺)" },
   // { value: "W003", label: "水庫昨日變化率 (%) " },
-  { value: RES_ID.Q001, label: "地震 - 芮氏規模" },
+  { value: RES_ID.Q001, label: "地震 - 震度階級" },
 ];
 export const VALUE_VALIDATOR = {
   [RES_ID.E002]: z.number().min(0).max(100),
@@ -38,6 +38,18 @@ export const POSITIONS = {
     { value: "south", label: "南部" },
   ],
   W: [
+    {
+      value: "竹廠",
+      label: "竹廠",
+    },
+    {
+      value: "中廠",
+      label: "中廠",
+    },
+    {
+      value: "南廠",
+      label: "南廠",
+    },
     {
       value: "石門水庫",
       label: "石門水庫",
@@ -120,6 +132,9 @@ export const POSITIONS = {
     },
   ],
   Q: [
+    { value: "竹廠", label: "竹廠", code: "A" },
+    { value: "中廠", label: "中廠", code: "B" },
+    { value: "南廠", label: "南廠", code: "C" },
     { value: "基隆市", label: "基隆市", code: "01" },
     { value: "台北市", label: "台北市", code: "02" },
     { value: "新北市", label: "新北市", code: "03" },
@@ -171,5 +186,5 @@ export const VALUES = {
   [RES_ID.W001]: { type: "percent", unit: "%" },
   //   W002: { type: "numeric", unit: "萬立方公尺" },
   //   W003: { type: "percent", unit: "%" },
-  [RES_ID.Q001]: { type: "numeric", unit: "芮氏規模" },
+  [RES_ID.Q001]: { type: "numeric", unit: "震度階級" },
 };
