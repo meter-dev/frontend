@@ -6,6 +6,8 @@ const MeterGauge = dynamic(() => import("./charts/gauge"), { ssr: false });
 import { format } from "d3-format";
 import { type EletricityResource } from "~/lib/resource";
 import SkeletonGauge from "../ui/skeleton-gauge";
+import { formatTime, fromNow } from "~/lib/dt";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 type Area = "north" | "central" | "south" | "east" | "whole";
 
@@ -20,6 +22,20 @@ const Electricity: React.FC<ElectricityProps> = ({ data }) => {
         <CardTitle className="flex items-center">
           <Icon icon="ion:flash" className="mr-2 h-5 w-5" />
           <span className="text-2xl font-semibold">Electricity</span>
+          {data && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="ml-3 self-end text-xs font-normal text-primary/50">
+                    Last update: {fromNow(data?.timestamp * 1000)}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span className="text-xs font-normal">{formatTime(data?.timestamp * 1000)}</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex w-full flex-wrap gap-x-4 overflow-x-auto">

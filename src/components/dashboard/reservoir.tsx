@@ -4,6 +4,8 @@ import dynamic from "next/dynamic";
 import { type WaterResource } from "~/lib/resource";
 import SkeletonLiquid from "../ui/skeleton-liquid";
 const MeterLiquid = dynamic(() => import("./charts/liquid"), { ssr: false });
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { fromNow } from "~/lib/dt";
 
 interface ReservoirProps {
   data?: WaterResource[];
@@ -27,13 +29,25 @@ const MixedReservoir: React.FC<{ data?: WaterResource }> = ({ data }) => {
 const IndivReservoir: React.FC<{ data?: WaterResource }> = ({ data }) => {
   if (!data) return <SkeletonLiquid width={MD} />;
   return (
-    <MeterLiquid
-      title={data.name}
-      width={MD}
-      timestamp={data.timestamp}
-      storage={data.storage}
-      percent={data.percent / 100}
-    />
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger className="hover:cursor-default">
+          <MeterLiquid
+            title={data.name}
+            width={MD}
+            timestamp={data.timestamp}
+            storage={data.storage}
+            percent={data.percent / 100}
+          />
+        </TooltipTrigger>
+        <TooltipContent>
+          <div>
+            {data.name}：{data.storage} 萬立方公尺
+          </div>
+          <div>Last update: {fromNow(data.timestamp * 1000)}</div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
@@ -49,28 +63,61 @@ const Reservoir: React.FC<ReservoirProps> = ({ data }) => {
       <CardContent className="flex w-full flex-wrap justify-between">
         <div className="grid grid-cols-3 place-content-center gap-2">
           <div className="col-span-3 flex w-full justify-center">
-            {<MixedReservoir data={data?.find((d) => d.name === "竹")} />}
+            {
+              <MixedReservoir
+                data={
+                  data?.filter((d) => d.name === "竹").sort((a, b) => b.timestamp - a.timestamp)[0]
+                }
+              />
+            }
           </div>
           {["石門水庫", "寶山第二水庫", "永和山水庫"].map((name) => (
-            <IndivReservoir key={name} data={data?.find((d) => d.name === name)} />
+            <IndivReservoir
+              key={name}
+              data={
+                data?.filter((d) => d.name === name).sort((a, b) => b.timestamp - a.timestamp)[0]
+              }
+            />
           ))}
         </div>
 
         <div className="grid grid-cols-2 place-content-center gap-2">
           <div className="col-span-2 flex w-full justify-center">
-            {<MixedReservoir data={data?.find((d) => d.name === "中")} />}
+            {
+              <MixedReservoir
+                data={
+                  data?.filter((d) => d.name === "中").sort((a, b) => b.timestamp - a.timestamp)[0]
+                }
+              />
+            }
           </div>
           {["鯉魚潭水庫", "德基水庫"].map((name) => (
-            <IndivReservoir key={name} data={data?.find((d) => d.name === name)} />
+            <IndivReservoir
+              key={name}
+              data={
+                data?.filter((d) => d.name === name).sort((a, b) => b.timestamp - a.timestamp)[0]
+              }
+            />
           ))}
         </div>
 
         <div className="grid grid-cols-3 place-content-center gap-2">
           <div className="col-span-3 flex w-full justify-center">
-            {<MixedReservoir data={data?.find((d) => d.name === "南")} />}
+            {
+              <MixedReservoir
+                data={
+                  data?.filter((d) => d.name === "南").sort((a, b) => b.timestamp - a.timestamp)[0]
+                }
+              />
+            }
           </div>
           {["南化水庫", "曾文水庫", "烏山頭水庫"].map((name) => (
-            <IndivReservoir key={name} data={data?.find((d) => d.name === name)} />
+            <IndivReservoir
+              key={name}
+              data={
+                data?.filter((d) => d.name === name).sort((a, b) => b.timestamp - a.timestamp)[0]
+              }
+            />
           ))}
         </div>
       </CardContent>

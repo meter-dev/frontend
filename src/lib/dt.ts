@@ -1,5 +1,12 @@
 import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
-export const formatTime = (isoDateTime: string) => {
-  return dayjs(isoDateTime).format("YYYY-MM-DD HH:mm:ss");
+dayjs.extend(relativeTime);
+
+export const formatTime = (timestamp: string | number) => {
+  return dayjs(timestamp).format("YYYY-MM-DD HH:mm:ss");
+};
+
+export const fromNow = (timestamp: string | number) => {
+  return dayjs(timestamp).fromNow();
 };

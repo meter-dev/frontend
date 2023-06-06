@@ -35,3 +35,16 @@ export interface WaterResource {
   storage: number;
   percent: number;
 }
+
+export interface EarthquakeResource {
+  id: number;
+  timestamp: number;
+  geometry: {
+    type: "Point";
+    coordinates: [number, number];
+  };
+  scale: number;
+  intensity: [number, number, number];
+  link: string;
+  img: string;
+}
