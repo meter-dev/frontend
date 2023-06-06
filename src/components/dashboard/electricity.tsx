@@ -27,7 +27,7 @@ const Electricity: React.FC<ElectricityProps> = ({ data }) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="ml-3 self-end text-xs font-normal text-primary/50">
-                    Last update: {fromNow(data?.timestamp * 1000)}
+                    最後更新於：{fromNow(data?.timestamp * 1000)}
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>

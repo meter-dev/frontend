@@ -6,7 +6,6 @@ import SkeletonLiquid from "../ui/skeleton-liquid";
 const MeterLiquid = dynamic(() => import("./charts/liquid"), { ssr: false });
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { fromNow } from "~/lib/dt";
-import { Separator } from "../ui/separator";
 
 interface ReservoirProps {
   data?: WaterResource[];
@@ -45,7 +44,7 @@ const IndivReservoir: React.FC<{ data?: WaterResource }> = ({ data }) => {
           <div>
             {data.name}：{data.storage} 萬立方公尺
           </div>
-          <div>Last update: {fromNow(data.timestamp * 1000)}</div>
+          <div>最後更新於：{fromNow(data.timestamp * 1000)}</div>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

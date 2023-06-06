@@ -106,9 +106,12 @@ export const columns: ColumnDef<EarthquakeResource>[] = [
           <DialogContent className="sm:max-w-5xl">
             <DialogHeader>
               <DialogTitle>
-                <a href={row.original.link} target="_blank" rel="noopener noreferrer">
-                  地震報告連結點此
-                </a>
+                <div className="flex gap-x-1">
+                  <Icon icon="octicon:link-external-16" className="mr-2 h-5 w-5" />
+                  <a href={row.original.link} target="_blank" rel="noopener noreferrer">
+                    地震報告連結點此
+                  </a>
+                </div>
               </DialogTitle>
             </DialogHeader>
             <div className="w-full">

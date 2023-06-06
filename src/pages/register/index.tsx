@@ -62,7 +62,7 @@ const Register: NextPage = () => {
   return (
     <div className="flex w-full flex-col items-start p-10">
       <h2 className="text-3xl font-bold">Get started 🚀</h2>
-      <span className="mt-2 text-sm text-slate-500">Create your account now</span>
+      <span className="mt-2 text-sm text-slate-500">開始建立你的帳號</span>
 
       <div className="my-4" />
 
@@ -70,7 +70,7 @@ const Register: NextPage = () => {
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-[360px] space-y-8">
           {form.formState.errors.root && (
-            <ErrorAlert title="登入失敗" description={form.formState.errors.root.message} />
+            <ErrorAlert title="註冊失敗" description={form.formState.errors.root.message} />
           )}
           <FormField
             control={form.control}
@@ -105,7 +105,7 @@ const Register: NextPage = () => {
                   />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name. At least 2 characters.
+                  請使用英文名稱且需至少有 2 個字元<br></br>此名稱將作為您在系統內的顯示名稱
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -125,7 +125,7 @@ const Register: NextPage = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>At least 8 characters.</FormDescription>
+                <FormDescription>需至少有 8 個字元</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -147,7 +147,7 @@ const Register: NextPage = () => {
             {form.formState.isSubmitting && (
               <Icon icon="ion:load-c" className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign Up
+            註冊
           </Button>
         </form>
       </Form>
@@ -155,7 +155,7 @@ const Register: NextPage = () => {
       <div className="my-6" />
 
       <Link href="/login" className={twMerge(buttonVariants({ variant: "link" }), "px-0")}>
-        {"Already have an account? Click here to Sign in now!"}
+        {"已經擁有帳號了嗎？點選這裡來進行登入！"}
       </Link>
     </div>
   );

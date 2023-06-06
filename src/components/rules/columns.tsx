@@ -22,18 +22,18 @@ export const columns: ColumnDef<Rule>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "規則名稱",
   },
   {
     accessorKey: "resource",
-    header: "Resource",
+    header: "監控資源",
     cell: ({ row }) => {
       return RESOURCES.find((r) => r.value === row.original.resource)?.label;
     },
   },
   {
     accessorKey: "position",
-    header: "Rule",
+    header: "警報規則",
     cell: ({ row }) => {
       const r = `${row.original.position} ${row.original.operator} ${row.original.value}`;
       return <div className="font-mono font-medium">{r}</div>;
@@ -41,7 +41,7 @@ export const columns: ColumnDef<Rule>[] = [
   },
   {
     accessorKey: "is_enable",
-    header: "Status",
+    header: "啟用狀態",
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-1">
@@ -55,11 +55,11 @@ export const columns: ColumnDef<Rule>[] = [
     },
   },
   {
-    header: "Actions",
+    header: "操作",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-x-2">
-          <Button variant="link" onClick={() => row.toggleExpanded()}>
+        <div className="flex items-center">
+          <Button variant="link" onClick={() => row.toggleExpanded()} className="px-0">
             Edit
           </Button>
         </div>
