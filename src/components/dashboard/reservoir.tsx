@@ -6,6 +6,7 @@ import SkeletonLiquid from "../ui/skeleton-liquid";
 const MeterLiquid = dynamic(() => import("./charts/liquid"), { ssr: false });
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { fromNow } from "~/lib/dt";
+import { Separator } from "../ui/separator";
 
 interface ReservoirProps {
   data?: WaterResource[];
@@ -53,15 +54,15 @@ const IndivReservoir: React.FC<{ data?: WaterResource }> = ({ data }) => {
 
 const Reservoir: React.FC<ReservoirProps> = ({ data }) => {
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Icon icon="ion:water-sharp" className="mr-2 h-5 w-5" />
           <span className="text-2xl font-semibold">Reservoir</span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full flex-wrap justify-between">
-        <div className="grid grid-cols-3 place-content-center gap-2">
+      <CardContent className="flex w-full flex-wrap gap-x-6">
+        <div className="grid grid-cols-3 place-content-center gap-1">
           <div className="col-span-3 flex w-full justify-center">
             {
               <MixedReservoir
@@ -81,7 +82,7 @@ const Reservoir: React.FC<ReservoirProps> = ({ data }) => {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 place-content-center gap-2">
+        <div className="grid grid-cols-2 place-content-center gap-1">
           <div className="col-span-2 flex w-full justify-center">
             {
               <MixedReservoir
@@ -101,7 +102,7 @@ const Reservoir: React.FC<ReservoirProps> = ({ data }) => {
           ))}
         </div>
 
-        <div className="grid grid-cols-3 place-content-center gap-2">
+        <div className="grid grid-cols-3 place-content-center gap-1">
           <div className="col-span-3 flex w-full justify-center">
             {
               <MixedReservoir

@@ -17,7 +17,7 @@ interface ElectricityProps {
 
 const Electricity: React.FC<ElectricityProps> = ({ data }) => {
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Icon icon="ion:flash" className="mr-2 h-5 w-5" />
@@ -38,7 +38,7 @@ const Electricity: React.FC<ElectricityProps> = ({ data }) => {
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full flex-wrap gap-x-4 overflow-x-auto">
+      <CardContent className="flex w-full flex-wrap gap-x-6 overflow-x-auto">
         {[
           { title: "全台", key: "whole" },
           { title: "北部", key: "north" },

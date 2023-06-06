@@ -16,7 +16,7 @@ interface EarthquakeProps {
 
 const Earthquake: React.FC<EarthquakeProps> = ({ data }) => {
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center">
           <Icon icon="ion:heart-broken" className="mr-2 h-5 w-5" />
