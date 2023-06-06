@@ -11,7 +11,7 @@ const Settings: NextPage = () => {
   }
 
   return (
-    <div>
+    <div className="p-6">
       <Button
         onClick={() => {
           void handleLogout();

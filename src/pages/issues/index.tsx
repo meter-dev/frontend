@@ -48,7 +48,7 @@ const Issues: NextPage = () => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col gap-4 pb-[300px]">
+    <div className="flex w-full flex-col gap-4 p-6 pb-[300px]">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">事件</h2>
       </div>
