@@ -9,7 +9,7 @@ export type Rule = {
   id: number;
   name: string;
   position: string;
-  resource: string;
+  resource: "E002" | "E003" | "W001" | "Q001";
   operator: string;
   value: number;
   is_enable: boolean;
@@ -49,17 +49,17 @@ export const columns: ColumnDef<Rule>[] = [
             icon={row.original.is_enable ? "mdi:check-bold" : "mdi:close-thick"}
             className={row.original.is_enable ? "text-green-500" : "text-red-500"}
           />
-          {row.original.is_enable ? "Enabled" : "Disabled"}
+          {row.original.is_enable ? "啟用中" : "禁用中"}
         </div>
       );
     },
   },
   {
     header: "Actions",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="flex items-center gap-x-2">
-          <Button variant="link" onClick={() => alert("TODO :(")}>
+          <Button variant="link" onClick={() => row.toggleExpanded()}>
             Edit
           </Button>
         </div>

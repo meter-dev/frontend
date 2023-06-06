@@ -125,7 +125,12 @@ const Issues: NextPage = () => {
           />
         </div>
       )}
-      <RuleTable data={filteredRules[ruleTab]} />
+      <RuleTable
+        data={filteredRules[ruleTab]}
+        onSuccess={() => {
+          void fetchRules();
+        }}
+      />
     </div>
   );
 };

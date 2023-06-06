@@ -11,7 +11,7 @@ import { fontClasses } from "~/lib/fonts";
 
 const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { data, error, mutate } = useSWR<{ data: User }>("/user/me", fetcher, {
+  const { data, error, mutate } = useSWR<{ data: User }>("/me", fetcher, {
     revalidateOnFocus: false,
   });
 
@@ -24,6 +24,7 @@ const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
     if (error && !autoLogout) {
       // todo: show modal
+      // todo: should set this in fetcher interceptor, not here
       if (window.location.pathname !== "/login") {
         window.location.pathname = "/login";
       }
