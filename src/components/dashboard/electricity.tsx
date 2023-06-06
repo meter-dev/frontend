@@ -4,69 +4,62 @@ import { Icon } from "@iconify/react";
 import dynamic from "next/dynamic";
 const MeterGauge = dynamic(() => import("./charts/gauge"), { ssr: false });
 import { format } from "d3-format";
+import { type EletricityResource } from "~/lib/resource";
+import SkeletonGauge from "../ui/skeleton-gauge";
+import { formatTime, fromNow } from "~/lib/dt";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
-const Electricity: React.FC = () => {
-  const data = {
-    north: {
-      value: 1139,
-      min: 711,
-      max: 1421,
-    },
-    central: {
-      value: 883,
-      min: 670,
-      max: 1340,
-    },
-    south: {
-      value: 1232,
-      min: 650,
-      max: 1300,
-    },
-  };
+type Area = "north" | "central" | "south" | "east" | "whole";
 
+interface ElectricityProps {
+  data?: EletricityResource;
+}
+
+const Electricity: React.FC<ElectricityProps> = ({ data }) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
           <Icon icon="ion:flash" className="mr-2 h-5 w-5" />
           <span className="text-2xl font-semibold">Electricity</span>
+          {data && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="ml-3 self-end text-xs font-normal text-primary/50">
+                    Last update: {fromNow(data?.timestamp * 1000)}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <span className="text-xs font-normal">{formatTime(data?.timestamp * 1000)}</span>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex w-full gap-x-4 overflow-x-auto">
-        <div className="flex w-[200px] flex-col items-center">
-          <MeterGauge
-            title="北部"
-            value={data.north.value}
-            min={data.north.min}
-            max={data.north.max}
-          />
-          <div>
-            備轉容量率：{format(".0%")((data.north.max - data.north.value) / data.north.value)}
-          </div>
-        </div>
-        <div className="flex w-[200px] flex-col items-center">
-          <MeterGauge
-            title="中部"
-            value={data.central.value}
-            min={data.central.min}
-            max={data.central.max}
-          />
-          <div>
-            備轉容量率：
-            {format(".0%")((data.central.max - data.central.value) / data.central.value)}
-          </div>
-        </div>
-        <div className="flex w-[200px] flex-col items-center">
-          <MeterGauge
-            title="南部"
-            value={data.south.value}
-            min={data.south.min}
-            max={data.south.max}
-          />
-          <div>
-            備轉容量率：{format(".0%")((data.south.max - data.south.value) / data.south.value)}
-          </div>
-        </div>
+      <CardContent className="flex w-full flex-wrap gap-x-4 overflow-x-auto">
+        {[
+          { title: "全台", key: "whole" },
+          { title: "北部", key: "north" },
+          { title: "中部", key: "central" },
+          { title: "南部", key: "south" },
+          { title: "東部", key: "east" },
+        ].map(({ title, key }) => {
+          if (!data) return <SkeletonGauge key={key} />;
+          const value = data[key as Area];
+          return (
+            <div className="flex w-[200px] flex-col items-center" key={key}>
+              <MeterGauge
+                title={title}
+                value={value.load}
+                min={Math.floor(value.max_supply / 2)}
+                max={Math.ceil(value.max_supply)}
+              />
+              <div>備轉容量率：{format(".0%")(value.recv_rate / 100)}</div>
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );

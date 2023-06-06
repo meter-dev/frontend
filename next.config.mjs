@@ -18,5 +18,15 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "scweb.cwb.gov.tw",
+        port: "",
+        pathname: "/webdata/**",
+      },
+    ],
+  },
 };
 export default config;
