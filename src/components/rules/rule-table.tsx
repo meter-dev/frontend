@@ -136,7 +136,7 @@ function DataTable<TData, TValue>({ columns, data, onSuccess }: DataTableProps<T
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                查無結果
               </TableCell>
             </TableRow>
           )}

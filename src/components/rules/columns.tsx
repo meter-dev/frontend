@@ -9,7 +9,7 @@ export type Rule = {
   id: number;
   name: string;
   position: string;
-  resource: "E002" | "E003" | "W001" | "Q001";
+  resource: "RECV_RATE" | "PERCENT" | "INTENSITY";
   operator: string;
   value: number;
   is_enable: boolean;
