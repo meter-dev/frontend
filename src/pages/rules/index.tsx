@@ -28,7 +28,7 @@ const Issues: NextPage = () => {
   return (
     <div className="flex w-full flex-col gap-4 p-6 pb-[300px]">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">警告規則</h2>
+        <h2 className="text-2xl font-bold">警報規則</h2>
       </div>
       <div className="flex items-center gap-x-8">
         <Tabs value={ruleTab} onValueChange={(v) => setRuleTab(v as RuleTab)}>
@@ -51,7 +51,7 @@ const Issues: NextPage = () => {
       </div>
       {isCreatingRule && (
         <div className="px-10 pb-10 pt-6">
-          <div className="mb-2 text-xl font-medium">新增警告規則</div>
+          <div className="mb-2 text-xl font-medium">新增警報規則</div>
           <RuleForm
             onCancel={() => setIsCreatingRule(false)}
             onSuccess={() => {
