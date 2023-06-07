@@ -3,7 +3,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { Icon } from "@iconify/react";
-import { RESOURCES } from "./options";
+import { POSITIONS, RESOURCES } from "./options";
 
 export type Rule = {
   id: number;
@@ -35,7 +35,11 @@ export const columns: ColumnDef<Rule>[] = [
     accessorKey: "position",
     header: "警報規則",
     cell: ({ row }) => {
-      const r = `${row.original.position} ${row.original.operator} ${row.original.value}`;
+      const l = POSITIONS[row.original.resource].find(
+        (r) => r.value === row.original.position
+      )?.label;
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      const r = `${l} ${row.original.operator} ${row.original.value}`;
       return <div className="font-mono font-medium">{r}</div>;
     },
   },
@@ -60,7 +64,7 @@ export const columns: ColumnDef<Rule>[] = [
       return (
         <div className="flex items-center">
           <Button variant="link" onClick={() => row.toggleExpanded()} className="px-0">
-            Edit
+            編輯
           </Button>
         </div>
       );
