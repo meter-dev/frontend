@@ -95,7 +95,7 @@ function DataTable<TData, TValue>({ columns, data, onSuccess }: DataTableProps<T
                         <div className="mb-2 text-xl font-medium">
                           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                           {/* @ts-ignore */}
-                          修改警告規則：{data[row.index].id}
+                          修改警報規則：{data[row.index].id}
                         </div>
                         <RuleForm
                           editRule={{
