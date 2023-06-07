@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type NextPage } from "next";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +25,7 @@ import { useContext } from "react";
 import Session from "~/lib/session-context";
 import { auth } from "~/lib/api";
 import ErrorAlert from "~/components/error-alert";
-import { errorSchema, getErrorMsg } from "~/lib/errors";
+import { getErrorMsg } from "~/lib/errors";
 
 const formSchema = z.object({
   username: z.string().min(1, "Please fill in your Email or Username"),
@@ -64,9 +67,12 @@ const Login: NextPage = () => {
       refetchUser();
       await router.push("/");
     } catch (e) {
-      const error = errorSchema.safeParse(e);
-      if (error.success && error.data.response.code) {
-        form.setError("root", { message: getErrorMsg(error.data.response.code) });
+      // const error = errorSchema.safeParse(e);
+      // @ts-ignore
+      if (e?.response?.data?.code) {
+        // if (error.success && error.data.response.code) {
+        // @ts-ignore
+        form.setError("root", { message: getErrorMsg(e?.response?.data?.code) });
       } else {
         form.setError("root", { message: getErrorMsg("UNKNOWN") });
         console.error(e);

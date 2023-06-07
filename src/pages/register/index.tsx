@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { type NextPage } from "next";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +22,7 @@ import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { user } from "~/lib/api";
 import ErrorAlert from "~/components/error-alert";
-import { errorSchema, getErrorMsg } from "~/lib/errors";
+import { getErrorMsg } from "~/lib/errors";
 
 const formSchema = z.object({
   email: z.string().min(1, "Please provide an Email").email("Invalid Email"),
@@ -49,9 +52,11 @@ const Register: NextPage = () => {
       console.log(result);
       await router.push("/login");
     } catch (e) {
-      const error = errorSchema.safeParse(e);
-      if (error.success && error.data.response.code) {
-        form.setError("root", { message: getErrorMsg(error.data.response.code) });
+      // @ts-ignore
+      if (e?.response?.data?.code) {
+        // if (error.success && error.data.response.code) {
+        // @ts-ignore
+        form.setError("root", { message: getErrorMsg(e?.response?.data?.code) });
       } else {
         form.setError("root", { message: getErrorMsg("UNKNOWN") });
         console.error(e);
