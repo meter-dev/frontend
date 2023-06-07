@@ -12,40 +12,47 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { twMerge } from "tailwind-merge";
 import { fontClasses } from "~/lib/fonts";
 import { formatTime } from "~/lib/dt";
+// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+// import { Button } from "../ui/button";
+import Issue from "./issue";
 
-export type Issue = {
-  id: string;
+// export type Issue = {
+//   id: string;
+//   title: string;
+//   description: string;
+//   alertId: string;
+//   status: "unresolved" | "reviewing" | "resolved";
+//   assignees: string[];
+//   createdAt: string;
+//   updatedAt: string;
+//   closedAt: string;
+//   closedBy: string;
+// };
+
+export type IssueListItem = {
+  id: number;
   title: string;
-  description: string;
-  alertId: string;
-  status: "unresolved" | "reviewing" | "resolved";
-  assignees: string[];
-  createdAt: string;
-  updatedAt: string;
-  closedAt: string;
-  closedBy: string;
+  status: "CREATED" | "PROCESSING" | "SOLVED";
+  created_at: string;
+  updated_at: string;
 };
 
-export const columns: ColumnDef<Issue>[] = [
+export const columns: ColumnDef<IssueListItem>[] = [
   {
     accessorKey: "id",
     header: "ID",
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: "名稱",
   },
   {
-    accessorKey: "alertId",
-    header: "Alert",
-  },
-  {
-    accessorKey: "assignees",
-    header: "Assignees",
-    cell: ({ row }) => {
+    header: "負責人",
+    cell: () => {
+      const assignees = ["Alice", "Bob", "Eve", "Carol"];
       return (
         <div className="flex gap-x-2">
-          {row.original.assignees.slice(0, 2).map((username) => {
+          {assignees.slice(0, 2).map((username) => {
             return (
               <TooltipProvider key={username}>
                 <Tooltip>
@@ -62,13 +69,13 @@ export const columns: ColumnDef<Issue>[] = [
               </TooltipProvider>
             );
           })}
-          {row.original.assignees.length > 2 && (
+          {assignees.length > 2 && (
             <DropdownMenu>
               <DropdownMenuTrigger className="h-8 w-8 rounded-full bg-secondary">
-                {row.original.assignees.length - 2}+
+                {assignees.length - 2}+
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                {row.original.assignees.map((username) => (
+                {assignees.map((username) => (
                   <DropdownMenuItem key={username} className={twMerge("font-sans", fontClasses)}>
                     <Avatar key={username} className="h-8 w-8">
                       {/* <AvatarImage src={user.avatar} /> */}
@@ -85,10 +92,29 @@ export const columns: ColumnDef<Issue>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created At",
+    accessorKey: "created_at",
+    header: "建立於",
     cell: ({ row }) => {
-      return formatTime(row.original.createdAt);
+      return formatTime(row.original.created_at);
     },
+  },
+  {
+    header: "詳細",
+    cell: ({ row }) => (
+      <Issue id={row.original.id} />
+      // <Dialog>
+      //   <DialogTrigger>
+      //     <Button variant="outline">檢視</Button>
+      //   </DialogTrigger>
+      //   <DialogContent className={twMerge("font-sans", fontClasses, "sm:max-w-5xl")}>
+      //     <DialogHeader>
+      //       <DialogTitle>
+      //         {row.original.id} - {row.original.title}
+      //       </DialogTitle>
+      //       {/* <DialogDescription>{row.original.content}</DialogDescription> */}
+      //     </DialogHeader>
+      //   </DialogContent>
+      // </Dialog>
+    ),
   },
 ];

@@ -38,4 +38,8 @@ const rule = {
   disable: (id: number) => fetcher.put(`/rule/${id}/disable`),
 };
 
-export { auth, user, rule };
+const issue = {
+  update: (id: number, data: { status: string }) => fetcher.patch(`/issue/${id}`, data),
+};
+
+export { auth, user, rule, issue };

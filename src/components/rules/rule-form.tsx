@@ -30,6 +30,8 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import ErrorAlert from "../error-alert";
 import { errorSchema, getErrorMsg } from "~/lib/errors";
+import { twMerge } from "tailwind-merge";
+import { fontClasses } from "~/lib/fonts";
 
 interface RuleFormProps {
   editRule?: Rule;
@@ -40,7 +42,9 @@ interface RuleFormProps {
 const formSchema = z
   .object({
     name: z.string().min(1, "必填欄位"),
-    resource: z.enum(["E002", "E003", "W001", "Q001"], { required_error: "必填欄位" }),
+    resource: z.enum(["RECV_RATE", "PERCENT", "INTENSITY"], {
+      required_error: "必填欄位",
+    }),
     position: z.string({ required_error: "必填欄位" }),
     operator: z.string({ required_error: "必填欄位" }),
     value: z.number({ invalid_type_error: "僅接受數字", required_error: "必填欄位" }),
@@ -164,7 +168,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                     <SelectTrigger className="w-[200px]" disabled={form.formState.isSubmitting}>
                       <SelectValue placeholder="請選擇" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className={twMerge("font-sans", fontClasses)}>
                       <SelectGroup>
                         <SelectLabel>監控資源</SelectLabel>
                         {RESOURCES.map(({ value, label }) => (
@@ -195,17 +199,17 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                     <SelectTrigger className="w-[180px]" disabled={form.formState.isSubmitting}>
                       <SelectValue placeholder="請選擇" />
                     </SelectTrigger>
-                    <SelectContent className="h-[300px] overflow-y-auto">
+                    <SelectContent
+                      className={twMerge("font-sans", fontClasses, "max-h-[300px] overflow-y-auto")}
+                    >
                       <SelectGroup>
                         <SelectLabel>監控範圍</SelectLabel>
                         {resource &&
-                          (POSITIONS[resource[0] as keyof typeof POSITIONS] || []).map(
-                            ({ value, label }) => (
-                              <SelectItem key={value} value={value}>
-                                {label}
-                              </SelectItem>
-                            )
-                          )}
+                          (POSITIONS[resource] || []).map(({ value, label }) => (
+                            <SelectItem key={value} value={value}>
+                              {label}
+                            </SelectItem>
+                          ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -226,7 +230,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                       <SelectValue placeholder="請選擇" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectGroup>
+                      <SelectGroup className={twMerge("font-sans", fontClasses)}>
                         <SelectLabel>規則運算</SelectLabel>
                         {OPERATORS.map(({ value, label }) => (
                           <SelectItem key={value} value={value}>
@@ -248,7 +252,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
               <FormItem>
                 <FormLabel>門檻值</FormLabel>
                 <FormControl>
-                  {resource && VALUES[resource].type === "category" ? (
+                  {/* {resource && VALUES[resource].type === "category" ? (
                     <Select onValueChange={(v) => field.onChange(parseInt(v, 10))}>
                       <SelectTrigger className="w-[120px]" disabled={form.formState.isSubmitting}>
                         <SelectValue placeholder="請選擇" />
@@ -256,7 +260,7 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>門檻值</SelectLabel>
-                          {VALUES[resource as "E003"].options.map(({ value, label }) => (
+                          {VALUES[resource].options.map(({ value, label }) => (
                             <SelectItem key={value} value={`${value}`}>
                               {label}
                             </SelectItem>
@@ -264,17 +268,17 @@ const RuleForm: React.FC<RuleFormProps> = ({ editRule, onCancel, onSuccess }) =>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                  ) : (
-                    <Input
-                      id="value"
-                      type="number"
-                      className="w-[120px]"
-                      value={field.value}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      onBlur={field.onBlur}
-                      disabled={!resource || form.formState.isSubmitting}
-                    />
-                  )}
+                  ) : ( */}
+                  <Input
+                    id="value"
+                    type="number"
+                    className="w-[120px]"
+                    value={field.value}
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onBlur={field.onBlur}
+                    disabled={!resource || form.formState.isSubmitting}
+                  />
+                  {/* )} */}
                 </FormControl>
                 {resource && !(VALUES[resource].type === "category") && (
                   <FormDescription>輸入單位：{VALUES[resource].unit}</FormDescription>

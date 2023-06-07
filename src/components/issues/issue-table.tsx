@@ -1,9 +1,9 @@
 import { DataTable } from "../ui/data-table";
 import SkeletonTable from "../ui/skeleton-table";
-import { type Issue, columns } from "./columns";
+import { columns, type IssueListItem } from "./columns";
 
 interface IssueTableProps {
-  data?: Issue[];
+  data?: IssueListItem[];
 }
 
 const IssueTable: React.FC<IssueTableProps> = ({ data }) => {
